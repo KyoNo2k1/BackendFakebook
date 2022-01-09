@@ -1,4 +1,5 @@
 import db from '../common/connect.js'
+import bcrypt  from "bcryptjs"
 
 const User = function(user){
     this.id = user.id;
@@ -47,12 +48,19 @@ User.update = (listData, result) => {
         else result(listData)
     })
 }
-User.check_login = (data, result) => {
-    db.query(`SELECT * FROM users WHERE email=? AND password=?`,[data.email, data.password], ( error,res ) => {
+User.check_login =async (data, result) => {
+    db.query(`SELECT * FROM users WHERE email=?`,[data.email], ( error,res ) => {
         if (error || res.length == 0){
             result(null)
         }
-        else result(res[0])
+        else {
+            bcrypt.compare(data.password, res[0].password, function(err, respone) {
+                if(err)
+                    result("Cant hash password")
+                if(respone)
+                    result(res[0])
+            });
+        }
     })
 }
 
