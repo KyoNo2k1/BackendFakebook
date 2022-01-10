@@ -1,34 +1,33 @@
-import Book from '../models/book.js';
+import Post from '../models/post.js';
 
 export const getList = function (req, res) {
-    Book.get_All((data) => {
+    Post.get_All((data) => {
         res.send({ result: data })
     })
 }
 export const getDetail = function (req, res) {
-    Book.getById(req.params.id, (respone) => {
+    Post.getById(req.params.id, (respone) => {
         res.send({ result: respone });
     })
 }
 
-export const addBook = (req, res) => {
-    console.log(req);
+export const createPost = (req, res) => {
     var data = req.body
-    Book.create(data, respone => {
+    Post.create(data, respone => {
         res.send({ result: respone })
     })
 }
 
-export const deleteBook = (req, res) => {
+export const deletePost = (req, res) => {
     var id = req.params.id
-    Book.delete(id, respone => {
+    Post.delete(id, respone => {
         res.send({ result: respone })
     })
 }
 
-export const updateBook = (req, res) => {
+export const updatePost = (req, res) => {
     var data = req.body
-    Book.update(data, respone => {
+    Post.update(data, respone => {
         res.send({ result: respone })
     })
 }

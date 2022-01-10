@@ -46,11 +46,9 @@ export const loginUser =async (req, res) => {
         password: req.body.password
     }
     User.check_login(data, async respone => {
-        console.log(respone);
-        if(respone){
+        if(respone!=null){
             const token = await makeToken(respone)
             res.send({result : token})
         }
-        else res.send(null)
     })
 }

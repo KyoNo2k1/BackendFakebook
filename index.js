@@ -1,5 +1,5 @@
 import express from 'express';
-import bookRouter from './app/routes/book.js'
+import postRouter from './app/routes/post.js'
 import userRouter from './app/routes/user.js'
 import cors from 'cors'
 import bodyParser from 'body-parser'
@@ -15,7 +15,7 @@ app.use('/user', userRouter)
 
 app.use(isAuth)
 
-app.use('/book', bookRouter)
+app.use('/post', postRouter)
 
 const PORT = 5000
 app.listen(PORT, function(){
