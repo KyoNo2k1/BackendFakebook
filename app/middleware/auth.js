@@ -15,27 +15,14 @@ export const makeToken = (user) => {
                 )
     })
 }
-export const checkAuth = (token) => {
-    return new Promise((resolve, reject) => {
-        jwt.verify  (   token,
-                        process.env.ACCESS_TOKEN_VERIFY,
-                        (err, data) => {
-                            if(err) {
-                                return reject(err)
-                            }
-                            return resolve(data)
-                        }
-                    )
-    })
-}
 
 export const isAuth =async (req, res, next) => {
     var _token = req.headers.authorization.split(" ")[1];
+    console.log("Token: ",_token);
     if (_token) {
         try {
-            var authData = await jwt.checkAuth(_token)
-
-            req.auth = authData
+            var userVerify = await jwt.verify(_token,process.env.ACCESS_TOKEN_VERIFY)
+            req.user = userVerify.data
             next()
         } catch (error) {
             return res.send({data: "Invalid token"})

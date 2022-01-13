@@ -28,9 +28,11 @@ User.getById = (id, result) => {
 User.create = (newData, result) => {
     db.query("INSERT INTO users SET ?", newData, ( error, res ) => {
         if (error){
-            result("User exists")
+            result(null)
         }
-        else result({id : res.insertId, ...newData})
+        else {
+            result({id : res.insertId, ...newData})
+        }
     })
 }
 User.delete = (id, result) => {
@@ -58,8 +60,9 @@ User.check_login =async (data, result) => {
             bcrypt.compare(data.password, res[0].password, function(err, respone) {
                 if(err)
                     result("Cant hash password")
-                if(respone)
-                    result(res[0])
+                if(respone){
+                    result({name: res[0].name, email: res[0].email})
+                }
             });
         }
     })

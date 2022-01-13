@@ -1,5 +1,5 @@
 import User from '../models/user.js'
-import { makeToken, checkAuth }  from "../middleware/auth.js"
+import { makeToken }  from "../middleware/auth.js"
 import bcrypt  from "bcryptjs"
 
 export const getList = function (req, res) {
@@ -14,15 +14,16 @@ export const getDetail = function (req, res) {
 }
 
 export const addUser =async (req, res) => {
-    var name = req.body.firstName+ req.body.lastName
+    var name = req.body.firstName + " " + req.body.lastName
     var hashPassword = await bcrypt.hash(req.body.password, 12)
     var data = {
         name,
         email: req.body.email,
-        password: hashPassword
+        password: hashPassword,
+        selectedFile: ''
     }
     User.create(data, respone => {
-        res.send({ result: respone })
+        res.send({ data: respone })
     })
 }
 
@@ -48,7 +49,7 @@ export const loginUser =async (req, res) => {
     User.check_login(data, async respone => {
         if(respone!=null){
             const token = await makeToken(respone)
-            res.send({result : token})
+            res.send({result : token,data : respone})
         }
     })
 }

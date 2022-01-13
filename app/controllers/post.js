@@ -11,10 +11,11 @@ export const getDetail = function (req, res) {
     })
 }
 
-export const createPost = (req, res) => {
+export const  createPost = (req, res) => {
     var data = req.body
-    Post.create(data, respone => {
-        res.send({ result: respone })
+    var newData = {...data, nameAuthor: req.user.name,createdAt: new Date().toISOString()}
+    Post.create(newData, respone => {
+        res.send({ data: respone })
     })
 }
 
