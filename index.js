@@ -11,9 +11,9 @@ app.use(bodyParser.json({ limit: "30mb", extended: true }))
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }))
 app.use(cors())
 
-app.use('/user', userRouter)
+app.use('/users', userRouter)
 
-app.use('/post',isAuth, postRouter)
+app.use('/posts',isAuth, postRouter)
 
 const PORT =process.env.PORT || 5000
 app.listen(PORT, function(){

@@ -25,6 +25,14 @@ User.getById = (id, result) => {
         else result(res[0])
     })
 }
+User.getByEmail = (email, result) => {
+    db.query(`SELECT * FROM users WHERE email = "${email}"`, ( error,res ) => {
+        if (error){
+            result(null)
+        }
+        else result(res[0])
+    })
+}
 User.create = (newData, result) => {
     db.query("INSERT INTO users SET ?", newData, ( error, res ) => {
         if (error){

@@ -10,15 +10,15 @@ const Post = function(post){
 }
 
 Post.get_All = (result) => {
-    db.query("SELECT * FROM fakebook", ( error,res ) => {
+    db.query("SELECT * FROM posts", ( error,res ) => {
         if (error){
-            result(null)
+            result("Cant get posts")
         }
-        else result(res)
+        else result(res.reverse())
     })
 }
 Post.getById = (id, result) => {
-    db.query(`SELECT * FROM fakebook WHERE id = ${id}`, ( error,res ) => {
+    db.query(`SELECT * FROM posts WHERE id = ${id}`, ( error,res ) => {
         if (error || res.length == 0){
             result(null)
         }
@@ -26,7 +26,7 @@ Post.getById = (id, result) => {
     })
 }
 Post.create = (newData, result) => {
-    db.query("INSERT INTO fakebook SET ?", newData, ( error, res ) => {
+    db.query("INSERT INTO posts SET ?", newData, ( error, res ) => {
         if (error){
             result(null)
         }
@@ -34,7 +34,7 @@ Post.create = (newData, result) => {
     })
 }
 Post.delete = (id, result) => {
-    db.query(`DELETE FROM fakebook WHERE id = ${id}`, ( error,res ) => {
+    db.query(`DELETE FROM posts WHERE id = ${id}`, ( error,res ) => {
         if (error || res.length == 0){
             result(null)
         }
@@ -42,11 +42,61 @@ Post.delete = (id, result) => {
     })
 }
 Post.update = (listData, result) => {
-    db.query("UPDATE fakebook SET nameAuthor=?,message=?,selectedFile=? WHERE id=?", [listData.nameAuthor, listData.message, listData.selectedFile, listData.id], ( error, res ) => {
+    db.query("UPDATE posts SET nameAuthor=?,message=?,selectedFile=? WHERE id=?", [listData.nameAuthor, listData.message, listData.selectedFile, listData.id], ( error, res ) => {
         if (error){
             result(null)
         }
         else result(listData)
+    })
+}
+Post.liking = (dataLike, result) => {
+    db.query("INSERT INTO likes SET ?", dataLike, ( error, res ) => {
+        if (error){
+            result(null)
+        }
+        else {
+            db.query("UPDATE posts SET likes = likes + 1 WHERE id = ?",dataLike.postId, ( error2, res2 ) => {
+                result({id : res.insertId, ...dataLike})
+            })
+        }
+    })
+}
+Post.dislike = (dataLike, result) => {
+    db.query("DELETE FROM likes WHERE postId= ?;", dataLike.postId, ( error, res ) => {
+        if (error){
+            result(null)
+        }
+        else {
+            db.query("UPDATE posts SET likes = likes - 1 WHERE id = ?",dataLike.postId, ( error2, res2 ) => {
+                result({id : res.insertId, ...dataLike})
+            })
+        }
+    })
+}
+Post.like = (dataLike, result) => {
+    db.query(`SELECT * FROM likes WHERE postId = ${dataLike.postId} AND userId = ${dataLike.userId}`, ( error,res ) => {
+        if (res[0] == undefined){
+            Post.liking(dataLike, (respone) => {
+                result({status: "Like",data: respone })
+            })
+        }
+        else{
+            Post.dislike(dataLike, respone => {
+                result({status: "DisLike",data: respone})
+            })
+        }
+    })
+}
+Post.getLikeById = (id, result) => {
+    db.query(`SELECT postId FROM likes WHERE userId = ${id}`, ( error,res ) => {
+        var ArrPostLike = []
+        for (var i = 0; i < res?.length; i++){
+            ArrPostLike.push(res[i]?.postId)
+        }
+        if (error){
+            result(null)
+        }
+        else result(ArrPostLike)
     })
 }
 

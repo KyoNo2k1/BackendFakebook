@@ -1,6 +1,7 @@
 import Post from '../models/post.js';
+import User from '../models/user.js';
 
-export const getList = function (req, res) {
+export const getPost = function (req, res) {
     Post.get_All((data) => {
         res.send({ result: data })
     })
@@ -13,7 +14,7 @@ export const getDetail = function (req, res) {
 
 export const  createPost = (req, res) => {
     var data = req.body
-    var newData = {...data, nameAuthor: req.user.name,createdAt: new Date().toISOString()}
+    var newData = {...data, nameAuthor: req?.user?.name,createdAt: new Date().toISOString()}
     Post.create(newData, respone => {
         res.send({ data: respone })
     })
@@ -32,3 +33,24 @@ export const updatePost = (req, res) => {
         res.send({ result: respone })
     })
 }
+
+export const likePost = (req, res) => {
+    User.getByEmail(req.body.userLiking.email, (respone) => {
+        var dataLike = {
+            userLiking: req.body.userLiking.name,
+            postId: req.body.postId,
+            userId: respone.id
+        }
+        Post.like(dataLike, (respone2) => {
+            res.send({ data: respone2 })
+        })
+    })
+}
+export const currentLikePost = (req, res) => {
+    User.getByEmail(req.user.email, (idUser) => {
+        Post.getLikeById(idUser?.id, (respone2) => {
+            res.send({ result: respone2 });
+        })
+    })
+}
+

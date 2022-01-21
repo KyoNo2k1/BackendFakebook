@@ -7,8 +7,14 @@ export const getList = function (req, res) {
         res.send({ result: data })
     })
 }
-export const getDetail = function (req, res) {
+export const getDetailById = function (req, res) {
     User.getById(req.params.id, (respone) => {
+        res.send({ result: respone });
+    })
+}
+export const getDetailByEmail = function (req, res) {
+    var email = req.body.email
+    User.getByEmail(email, (respone) => {
         res.send({ result: respone });
     })
 }
