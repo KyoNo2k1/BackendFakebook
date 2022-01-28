@@ -99,5 +99,22 @@ Post.getLikeById = (id, result) => {
         else result(ArrPostLike)
     })
 }
+Post.comment = (newData, result) => {
+    db.query("INSERT INTO comments SET ?", newData, ( error, res ) => {
+        if (error){
+            result(null)
+        }
+        else result({id : res.insertId, ...newData})
+    })
+}
+Post.getCommentById = (postId, result) => {
+    db.query(`SELECT * FROM comments WHERE postId = ${postId}`, ( error,res ) => {
+        if (error || res.length == 0){
+            result(null)
+        }
+        else result(res)
+    })
+}
+
 
 export default Post

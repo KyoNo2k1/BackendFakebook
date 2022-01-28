@@ -53,4 +53,18 @@ export const currentLikePost = (req, res) => {
         })
     })
 }
-
+export const commentPost = (req, res) => {
+    User.getByEmail(req.user.email, (emailUser) => {
+        var data = req.body
+        var newData = {...data, emailUser:emailUser.name, createdAt: new Date().toISOString()}
+        Post.comment(newData, respone => {
+            res.send({ data: respone })
+        })
+    })
+}
+export const getCommentPost = (req, res) => {
+    var postId = req.params.postId
+    Post.getCommentById(postId, respone => {
+        res.send({ result: respone })
+    })
+}

@@ -1,5 +1,5 @@
 import express from "express";
-import { getPost, getDetail, createPost, deletePost, updatePost, likePost, currentLikePost } from '../controllers/post.js'
+import { getPost, getDetail, createPost, deletePost, updatePost, likePost, currentLikePost, commentPost, getCommentPost } from '../controllers/post.js'
 
 const router = express.Router();
 
@@ -15,5 +15,8 @@ router.put('/update', updatePost)
 
 router.get('/currentLikePost', currentLikePost)
 router.post('/likePost', likePost)
+
+router.get('/commentPost/:postId', getCommentPost)
+router.post('/comment', commentPost)
 
 export default router
