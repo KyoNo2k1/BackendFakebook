@@ -1,11 +1,45 @@
 import Post from '../models/post.js';
 import User from '../models/user.js';
+import db from '../common/connect.js'
 
 export const getPost = function (req, res) {
     Post.get_All((data) => {
-        res.send({ result: data })
+        res.send({ result: data });
     })
 }
+
+export const getPostByPage = function (req, res) {
+
+    const { page } = req.query
+    db.query("SELECT * FROM posts", ( error, res2) => {
+        if (error){
+            res.send({ result: "Cant get posts" })
+        }
+        else {
+            const fetchData = async () => {
+                try {
+                    var cloneArr = res2
+                    const LIMIT = 5
+                    const startIndex = (Number(page) - 1 ) * LIMIT
+                    // var newData =await cloneArr.sort( (firstEl, secondEl) => {
+                    //     if (secondEl.id < firstEl.id){
+                    //         return -1;
+                    //     }
+                    //     else {
+                    //         return 0;
+                    //     }
+                    // }).splice(startIndex,LIMIT)
+                    var newData = res2.reverse().splice(startIndex,LIMIT)
+                    res.send({ result: newData })
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+            fetchData()
+        }
+    })
+}
+
 export const getDetail = function (req, res) {
     Post.getById(req.params.id, (respone) => {
         res.send({ result: respone });

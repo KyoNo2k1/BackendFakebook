@@ -28,6 +28,7 @@ Post.getById = (id, result) => {
 Post.create = (newData, result) => {
     db.query("INSERT INTO posts SET ?", newData, ( error, res ) => {
         if (error){
+            console.log(error);
             result(null)
         }
         else result({id : res.insertId, ...newData})
