@@ -7,8 +7,8 @@ import bodyParser from 'body-parser'
 import {isAuth} from './app/middleware/auth.js'
 var app = express();
 
-app.use(bodyParser.json({ limit: "30mb", extended: true }))
-app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }))
+app.use(bodyParser.json({ limit: "100mb", extended: true }))
+app.use(bodyParser.urlencoded({ limit: "100mb", extended: true }))
 app.use(cors())
 
 app.use('/users', userRouter)

@@ -18,19 +18,10 @@ export const getPostByPage = function (req, res) {
         else {
             const fetchData = async () => {
                 try {
-                    var cloneArr = res2
                     const LIMIT = 5
                     const startIndex = (Number(page) - 1 ) * LIMIT
-                    // var newData =await cloneArr.sort( (firstEl, secondEl) => {
-                    //     if (secondEl.id < firstEl.id){
-                    //         return -1;
-                    //     }
-                    //     else {
-                    //         return 0;
-                    //     }
-                    // }).splice(startIndex,LIMIT)
                     var newData = res2.reverse().splice(startIndex,LIMIT)
-                    res.send({ result: newData })
+                    res.send({ result: newData, limit: LIMIT })
                 } catch (error) {
                     console.log(error);
                 }
@@ -46,7 +37,7 @@ export const getDetail = function (req, res) {
     })
 }
 
-export const  createPost = (req, res) => {
+export const createPost = (req, res) => {
     var data = req.body
     var newData = {...data, nameAuthor: req?.user?.name,createdAt: new Date().toISOString()}
     Post.create(newData, respone => {
@@ -96,9 +87,10 @@ export const commentPost = (req, res) => {
         })
     })
 }
-export const getCommentPost = (req, res) => {
-    var postId = req.params.postId
-    Post.getCommentById(postId, respone => {
-        res.send({ result: respone })
+
+export const getCommentByPage = function (req, res) {
+    var postId = req.body.postId
+    Post.getCommentByPostId(postId, (respone) => {
+        res.send({ result: respone });
     })
 }

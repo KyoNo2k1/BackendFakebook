@@ -1,9 +1,10 @@
 import express from "express";
-import { getPost, getDetail, createPost, deletePost, updatePost, likePost, currentLikePost, commentPost, getCommentPost, getPostByPage } from '../controllers/post.js'
+import { getPost, getDetail, createPost, deletePost, updatePost, likePost, currentLikePost, commentPost, getPostByPage,getCommentByPage } from '../controllers/post.js'
 
 const router = express.Router();
 
-// router.get('/', getPost)
+router.get('/getposts', getPost)
+
 router.get('/', getPostByPage)
 
 router.get('/detail/:id', getDetail)
@@ -14,10 +15,12 @@ router.delete('/delete/:id', deletePost)
 
 router.put('/update', updatePost)
 
-router.get('/currentLikePost', currentLikePost)
 router.post('/likePost', likePost)
 
-router.get('/commentPost/:postId', getCommentPost)
+router.get('/currentLikePost', currentLikePost)
+
 router.post('/comment', commentPost)
+
+router.post('/getCommentByPage', getCommentByPage)
 
 export default router

@@ -108,14 +108,14 @@ Post.comment = (newData, result) => {
         else result({id : res.insertId, ...newData})
     })
 }
-Post.getCommentById = (postId, result) => {
-    db.query(`SELECT * FROM comments WHERE postId = ${postId}`, ( error,res ) => {
-        if (error || res.length == 0){
+
+Post.getCommentByPostId = (arrPostId, result) => {
+    db.query(`SELECT * FROM comments where postId in ${arrPostId}`, ( error, res ) => {
+        if (error){
             result(null)
         }
         else result(res)
     })
 }
-
 
 export default Post
