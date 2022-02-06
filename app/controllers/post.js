@@ -39,7 +39,7 @@ export const getDetail = function (req, res) {
 
 export const createPost = (req, res) => {
     var data = req.body
-    var newData = {...data, nameAuthor: req?.user?.name,createdAt: new Date().toISOString()}
+    var newData = {...data,emailAuthor: req.user.email, nameAuthor: req?.user?.name,createdAt: new Date().toISOString()}
     Post.create(newData, respone => {
         res.send({ data: respone })
     })
@@ -91,6 +91,13 @@ export const commentPost = (req, res) => {
 export const getCommentByPage = function (req, res) {
     var postId = req.body.postId
     Post.getCommentByPostId(postId, (respone) => {
+        res.send({ result: respone });
+    })
+}
+
+export const isAuthorPost = function (req, res) {
+    var postId = req.body
+    Post.isAuthorByPostId(postId, (respone) => {
         res.send({ result: respone });
     })
 }

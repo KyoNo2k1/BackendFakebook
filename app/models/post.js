@@ -39,7 +39,7 @@ Post.delete = (id, result) => {
         if (error || res.length == 0){
             result(null)
         }
-        else result(`Delete Post id:${id} success`)
+        else result(`Delete Post success`)
     })
 }
 Post.update = (listData, result) => {
@@ -111,6 +111,16 @@ Post.comment = (newData, result) => {
 
 Post.getCommentByPostId = (arrPostId, result) => {
     db.query(`SELECT * FROM comments where postId in ${arrPostId}`, ( error, res ) => {
+        if (error){
+            result(null)
+        }
+        else result(res)
+    })
+}
+Post.isAuthorByPostId = (postId, result) => {
+    console.log(postId);
+    db.query(`SELECT * FROM posts where id = ${postId}`, ( error, res ) => {
+        console.log(res);
         if (error){
             result(null)
         }
