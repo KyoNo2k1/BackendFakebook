@@ -28,7 +28,6 @@ Post.getById = (id, result) => {
 Post.create = (newData, result) => {
     db.query("INSERT INTO posts SET ?", newData, ( error, res ) => {
         if (error){
-            console.log(error);
             result(null)
         }
         else result({id : res.insertId, ...newData})
@@ -43,7 +42,7 @@ Post.delete = (id, result) => {
     })
 }
 Post.update = (listData, result) => {
-    db.query("UPDATE posts SET nameAuthor=?,message=?,selectedFile=? WHERE id=?", [listData.nameAuthor, listData.message, listData.selectedFile, listData.id], ( error, res ) => {
+    db.query("UPDATE posts SET message=?,selectedFile=? WHERE id=?", [listData.message, listData.selectedFile, listData.id], ( error, res ) => {
         if (error){
             result(null)
         }
@@ -118,9 +117,7 @@ Post.getCommentByPostId = (arrPostId, result) => {
     })
 }
 Post.isAuthorByPostId = (postId, result) => {
-    console.log(postId);
     db.query(`SELECT * FROM posts where id = ${postId}`, ( error, res ) => {
-        console.log(res);
         if (error){
             result(null)
         }

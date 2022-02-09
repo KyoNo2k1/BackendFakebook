@@ -1,5 +1,5 @@
 import express from "express";
-import { getPost, getDetail, createPost, deletePost, updatePost, likePost, currentLikePost, commentPost, getPostByPage,getCommentByPage,isAuthorPost } from '../controllers/post.js'
+import { getPost, createPost, deletePost, updatePost, likePost, currentLikePost, commentPost, getPostByPage,getCommentByPage,isAuthorPost } from '../controllers/post.js'
 
 const router = express.Router();
 
@@ -7,13 +7,13 @@ const router = express.Router();
 
 router.get('/', getPostByPage)
 
-router.get('/detail/:id', getDetail)
+router.get('/:id', getPost)
 
 router.post('/', createPost)
 
 router.delete('/delete/:id', deletePost)
 
-router.put('/update', updatePost)
+router.patch('/update', updatePost)
 
 router.post('/likePost', likePost)
 

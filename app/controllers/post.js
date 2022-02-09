@@ -3,8 +3,8 @@ import User from '../models/user.js';
 import db from '../common/connect.js'
 
 export const getPost = function (req, res) {
-    Post.get_All((data) => {
-        res.send({ result: data });
+    Post.getById(req.params.id, (respone) => {
+        res.send({ result: respone });
     })
 }
 
@@ -28,12 +28,6 @@ export const getPostByPage = function (req, res) {
             }
             fetchData()
         }
-    })
-}
-
-export const getDetail = function (req, res) {
-    Post.getById(req.params.id, (respone) => {
-        res.send({ result: respone });
     })
 }
 
