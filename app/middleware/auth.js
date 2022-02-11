@@ -53,7 +53,7 @@ export const  makeTokenRefresh = (user) => {
                 )
     })
 }
-export const refreshToken =async (req, res,next) => {
+export const refreshToken =async (req, res) => {
     const refreshToken = req.body.token
     const user = req.body.user
     if(!refreshToken) res.send({ data: "Dont have refresh token"})
@@ -61,7 +61,6 @@ export const refreshToken =async (req, res,next) => {
         var refreshTokens = []
         respone.map(token =>refreshTokens.push(token.refToken))
         if(!refreshTokens.includes(refreshToken)) res.send({ data: "Wrong refresh token"})
-        next()
     })
     jwt.verify(refreshToken,process.env.REFRESH_TOKEN_VERIFY, (err,data) => {
         if(err) res.send({err,data: "Can't verify refresh token"})
