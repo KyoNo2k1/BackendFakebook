@@ -75,5 +75,26 @@ User.check_login =async (data, result) => {
         }
     })
 }
+User.add_refresh_token = (newData, result) => {
+    db.query("INSERT INTO refreshtokens SET ?", newData, ( error, res ) => {
+        if (error){
+            result(null)
+        }
+        else {
+            result({id : res.insertId, ...newData})
+        }
+    })
+}
+User.get_refresh_token =async (user, result) => {
+    db.query(`SELECT * FROM refreshtokens WHERE userEmail=?`,user, ( error,res ) => {
+        if (error || res.length == 0){
+            result(null)
+        }
+        else {
+            result(res)
+        }
+    })
+}
+
 
 export default User

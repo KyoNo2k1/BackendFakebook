@@ -1,7 +1,7 @@
 import User from '../models/user.js'
-import { makeToken }  from "../middleware/auth.js"
+import { makeToken, makeTokenRefresh }  from "../middleware/auth.js"
 import bcrypt  from "bcryptjs"
-
+import jwt_decode from "jwt-decode";
 export const getList = function (req, res) {
     User.get_All((data) => {
         res.send({ result: data })
@@ -16,20 +16,6 @@ export const getDetailByEmail = function (req, res) {
     var email = req.body.email
     User.getByEmail(email, (respone) => {
         res.send({ result: respone });
-    })
-}
-
-export const addUser =async (req, res) => {
-    var name = req.body.firstName + " " + req.body.lastName
-    var hashPassword = await bcrypt.hash(req.body.password, 12)
-    var data = {
-        name,
-        email: req.body.email,
-        password: hashPassword,
-        selectedFile: ''
-    }
-    User.create(data, respone => {
-        res.send({ data: respone })
     })
 }
 
@@ -55,7 +41,22 @@ export const loginUser =async (req, res) => {
     User.check_login(data, async respone => {
         if(respone!=null){
             const token = await makeToken(respone)
-            res.send({result : token,data : respone})
+            const decodeToken =await jwt_decode(token)
+            const refreshTokenValue = await makeTokenRefresh(respone)
+            res.send({token,data : respone, refreshToken: refreshTokenValue, exp: decodeToken.exp})
         }
+    })
+}
+export const addUser =async (req, res) => {
+    var name = req.body.firstName + " " + req.body.lastName
+    var hashPassword = await bcrypt.hash(req.body.password, 12)
+    var data = {
+        name,
+        email: req.body.email,
+        password: hashPassword,
+        selectedFile: ''
+    }
+    User.create(data, respone => {
+        res.send({ data: respone })
     })
 }
