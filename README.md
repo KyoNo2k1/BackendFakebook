@@ -1,8 +1,7 @@
 # BackendFakebook
 Deploy Heroku
 
-Link: https://dashboard.heroku.com/apps/fakebookbackenddeploy
-
+Link: https://fakebookweb.netlify.app/
 DataBase: 
   Host: sql6.freesqldatabase.com
   Database name: sql6472216
