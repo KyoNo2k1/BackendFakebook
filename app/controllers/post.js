@@ -33,7 +33,7 @@ export const getPostByPage = function (req, res) {
 
 export const createPost = (req, res) => {
     var data = req.body
-    var newData = {...data,emailAuthor: req.user.email, nameAuthor: req?.user?.name,createdAt: new Date().toISOString()}
+    var newData = {...data,emailAuthor: req.user?.email, nameAuthor: req?.user?.name,createdAt: new Date().toISOString()}
     Post.create(newData, respone => {
         res.send({ data: respone })
     })
@@ -54,26 +54,41 @@ export const updatePost = (req, res) => {
 }
 
 export const likePost = (req, res) => {
-    User.getByEmail(req.body.userLiking.email, (respone) => {
+    var _token = req.headers.authorization?.split(" ")[1];
+    if(_token.length < 700) {
+        User.getByEmail(req.body.userLiking.email, (respone) => {
+            var dataLike = {
+                userLiking: req.body.userLiking.name,
+                postId: req.body.postId,
+                userId: respone.id
+            }
+            Post.like(dataLike, (respone2) => {
+                res.send({ data: respone2 })
+            })
+        })
+    }
+    else {
         var dataLike = {
-            userLiking: req.body.userLiking.name,
+            userLiking: req.user?.name,
             postId: req.body.postId,
-            userId: respone.id
+            userId: req.user?.user_id,
+            name: req.user?.name,
+            email: req.user?.email
         }
         Post.like(dataLike, (respone2) => {
             res.send({ data: respone2 })
         })
-    })
+    }
 }
 export const currentLikePost = (req, res) => {
-    User.getByEmail(req.user.email, (idUser) => {
+    User.getByEmail(req.user?.email, (idUser) => {
         Post.getLikeById(idUser?.id, (respone2) => {
             res.send({ result: respone2 });
         })
     })
 }
 export const commentPost = (req, res) => {
-    User.getByEmail(req.user.email, (emailUser) => {
+    User.getByEmail(req.user?.email, (emailUser) => {
         var data = req.body
         var newData = {...data, emailUser:emailUser.name, createdAt: new Date().toISOString()}
         Post.comment(newData, respone => {

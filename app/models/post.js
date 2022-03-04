@@ -1,4 +1,5 @@
 import db from '../common/connect.js'
+import User from '../models/user.js'
 
 const Post = function(post){
     this.id = post.id;
@@ -73,17 +74,37 @@ Post.dislike = (dataLike, result) => {
         }
     })
 }
+const newUserLike =async (dataLike) =>{
+    console.log(dataLike);
+    var newUser = {
+        id: dataLike.userId,
+        name: dataLike.name,
+        email: dataLike.email
+    }
+    await User.create(newUser, respone => {
+        return newUser
+    })
+}
 Post.like = (dataLike, result) => {
-    db.query(`SELECT * FROM likes WHERE postId = ${dataLike.postId} AND userId = ${dataLike.userId}`, ( error,res ) => {
-        if (res[0] == undefined){
-            Post.liking(dataLike, (respone) => {
+    db.query(`SELECT * FROM likes WHERE postId = ${dataLike.postId} AND userId = ${dataLike.userId}`,async ( error,res ) => {
+        if(error) {
+            console.log(error);
+            const newdataLike = await newUserLike(dataLike)
+            await Post.liking(newdataLike, (respone) => {
                 result({status: "Like",data: respone })
             })
         }
         else{
-            Post.dislike(dataLike, respone => {
-                result({status: "DisLike",data: respone})
-            })
+            if (res[0] == null){
+                Post.liking(dataLike, (respone) => {
+                    result({status: "Like",data: respone })
+                })
+            }
+            else{
+                Post.dislike(dataLike, respone => {
+                    result({status: "DisLike",data: respone})
+                })
+            }
         }
     })
 }

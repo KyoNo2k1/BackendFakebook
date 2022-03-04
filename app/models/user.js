@@ -39,6 +39,9 @@ User.create = (newData, result) => {
             result(null)
         }
         else {
+            // if(newData?.userId){
+            //     result({id : res.insertId, ...newData})
+            // }
             result({id : res.insertId, ...newData})
         }
     })
