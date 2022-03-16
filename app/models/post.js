@@ -75,7 +75,6 @@ Post.dislike = (dataLike, result) => {
     })
 }
 const newUserLike =async (dataLike) =>{
-    console.log(dataLike);
     var newUser = {
         id: dataLike.userId,
         name: dataLike.name,
@@ -114,6 +113,7 @@ Post.getLikeById = (id, result) => {
         for (var i = 0; i < res?.length; i++){
             ArrPostLike.push(res[i]?.postId)
         }
+        console.log(ArrPostLike)
         if (error){
             result(null)
         }

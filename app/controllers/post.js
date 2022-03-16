@@ -81,8 +81,10 @@ export const likePost = (req, res) => {
     }
 }
 export const currentLikePost = (req, res) => {
-    User.getByEmail(req.user?.email, (idUser) => {
+    console.log(req.body);
+    User.getByEmail(req.body.email, (idUser) => {
         Post.getLikeById(idUser?.id, (respone2) => {
+            console.log(respone2);
             res.send({ result: respone2 });
         })
     })

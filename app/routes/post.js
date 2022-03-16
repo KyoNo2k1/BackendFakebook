@@ -3,8 +3,6 @@ import { getPost, createPost, deletePost, updatePost, likePost, currentLikePost,
 
 const router = express.Router();
 
-// router.get('/getposts', getPost)
-
 router.get('/', getPostByPage)
 
 router.get('/:id', getPost)
