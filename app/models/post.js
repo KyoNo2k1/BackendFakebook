@@ -113,7 +113,6 @@ Post.getLikeById = (id, result) => {
         for (var i = 0; i < res?.length; i++){
             ArrPostLike.push(res[i]?.postId)
         }
-        console.log(ArrPostLike)
         if (error){
             result(null)
         }

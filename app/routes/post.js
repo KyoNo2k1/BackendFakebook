@@ -15,7 +15,7 @@ router.patch('/update', updatePost)
 
 router.post('/likePost', likePost)
 
-router.get('/currentLikePost', currentLikePost)
+router.post('/currentLikePost', currentLikePost)
 
 router.post('/comment', commentPost)
 
