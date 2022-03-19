@@ -1,5 +1,4 @@
 import mysql from 'mysql'
-
     // var connection = mysql.createConnection({
     //     host: 'sql6.freesqldatabase.com',
     //     user: 'sql6479342',
