@@ -1,22 +1,16 @@
 import mysql from 'mysql'
-    // var connection = mysql.createConnection({
-    //     host: 'sql6.freesqldatabase.com',
-    //     user: 'sql6480060',
-    //     password: 'gbZttuf9dj',
-    //     database: 'sql6480060'
-    // })
+    var connection = mysql.createConnection({
+        host: 'sql6.freesqldatabase.com',
+        user: 'sql6483721',
+        password: '3c6diMm9SJ',
+        database: 'sql6483721'
+    })
 // var connection = mysql.createConnection({
 //     host: 'localhost',
 //     user: 'root',
 //     password: '',
 //     database: 'fakebook'
 // })
-var connection = mysql.createConnection({
-    host: 'h21665.tino.org',
-    user: 'wjpukico_wjpuki',
-    password: 'Nghialop12a15',
-    database: 'wjpukico_wjpuki'
-})
 
 
 connection.connect(function(err) {
