@@ -86,12 +86,12 @@ Post.dislike = (dataLike, result) => {
 };
 const newUserLike = async (dataLike) => {
   var newUser = {
-    id: dataLike.userId,
+    // id: dataLike.id,
     name: dataLike.name,
     email: dataLike.email,
   };
   await User.create(newUser, (respone) => {
-    return newUser;
+    return respone;
   });
 };
 Post.like = (dataLike, result) => {
@@ -117,15 +117,20 @@ Post.like = (dataLike, result) => {
   else {
     User.getByEmail(dataLike.email, async (respone) => {
       if (!respone) {
-        await newUserLike(dataLike);
-        const newdataLike = {
-          userLiking: dataLike.name,
-          postId: dataLike.postId,
-          userId: respone.id,
+        var newUser = {
+          // id: dataLike.id,
+          name: dataLike.name,
+          email: dataLike.email,
         };
-        console.log(newdataLike);
-        await Post.liking(newdataLike, (respone) => {
-          result({ status: "Like", data: respone });
+        await User.create(newUser, async (respone) => {
+          const newDataLike = {
+            userLiking: dataLike.name,
+            postId: dataLike.postId,
+            userId: respone?.id,
+          };
+          Post.liking(newDataLike, (respone) => {
+            result({ status: "Like", data: respone });
+          });
         });
       } else {
         db.query(
@@ -153,11 +158,6 @@ Post.like = (dataLike, result) => {
         );
       }
     });
-    // const newdataLike = await newUserLike(dataLike);
-    // console.log(newdataLike);
-    // await Post.liking(newdataLike, (respone) => {
-    //   result({ status: "Like", data: respone });
-    // });
   }
 };
 Post.getLikeById = (id, result) => {
