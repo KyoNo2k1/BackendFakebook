@@ -95,29 +95,70 @@ const newUserLike = async (dataLike) => {
   });
 };
 Post.like = (dataLike, result) => {
-  db.query(
-    `SELECT * FROM likes WHERE postId = ${dataLike.postId} AND userId = ${dataLike.userId}`,
-    async (error, res) => {
-      if (error) {
-        console.log(error);
-        const newdataLike = await newUserLike(dataLike);
+  if (Number.isInteger(dataLike.userId))
+    db.query(
+      `SELECT * FROM likes WHERE postId = ${dataLike.postId} AND userId = ${dataLike.userId}`,
+      async (error, res) => {
+        if (error) {
+          console.log(error);
+        } else {
+          if (res[0] == null) {
+            Post.liking(dataLike, (respone) => {
+              result({ status: "Like", data: respone });
+            });
+          } else {
+            Post.dislike(dataLike, (respone) => {
+              result({ status: "DisLike", data: respone });
+            });
+          }
+        }
+      }
+    );
+  else {
+    User.getByEmail(dataLike.email, async (respone) => {
+      if (!respone) {
+        await newUserLike(dataLike);
+        const newdataLike = {
+          userLiking: dataLike.name,
+          postId: dataLike.postId,
+          userId: respone.id,
+        };
         console.log(newdataLike);
         await Post.liking(newdataLike, (respone) => {
           result({ status: "Like", data: respone });
         });
       } else {
-        if (res[0] == null) {
-          Post.liking(dataLike, (respone) => {
-            result({ status: "Like", data: respone });
-          });
-        } else {
-          Post.dislike(dataLike, (respone) => {
-            result({ status: "DisLike", data: respone });
-          });
-        }
+        db.query(
+          `SELECT * FROM likes WHERE postId = ${dataLike.postId} AND userId = ${respone.id}`,
+          async (error, res) => {
+            if (error) {
+              console.log(error);
+            } else {
+              const newdataLike = {
+                userLiking: dataLike.name,
+                postId: dataLike.postId,
+                userId: respone.id,
+              };
+              if (res[0] == null) {
+                Post.liking(newdataLike, (respone) => {
+                  result({ status: "Like", data: respone });
+                });
+              } else {
+                Post.dislike(newdataLike, (respone) => {
+                  result({ status: "DisLike", data: respone });
+                });
+              }
+            }
+          }
+        );
       }
-    }
-  );
+    });
+    // const newdataLike = await newUserLike(dataLike);
+    // console.log(newdataLike);
+    // await Post.liking(newdataLike, (respone) => {
+    //   result({ status: "Like", data: respone });
+    // });
+  }
 };
 Post.getLikeById = (id, result) => {
   db.query(`SELECT postId FROM likes WHERE userId = ${id}`, (error, res) => {
