@@ -12,6 +12,7 @@ export const getPostByPage = function (req, res) {
   const { page } = req.query;
   db.query("SELECT * FROM posts", (error, res2) => {
     if (error) {
+      console.log(error);
       res.send({ result: "Cant get posts" });
     } else {
       const fetchData = async () => {
@@ -91,17 +92,30 @@ export const currentLikePost = (req, res) => {
 };
 
 export const commentPost = (req, res) => {
-  User.getByEmail(req.user?.email, (emailUser) => {
-    var data = req.body;
-    var newData = {
-      ...data,
-      emailUser: emailUser.name,
+  var _token = req.headers.authorization?.split(" ")[1];
+  if (_token.length < 700) {
+    User.getByEmail(req.user?.email, (emailUser) => {
+      var data = req.body;
+      var newData = {
+        ...data,
+        emailUser: emailUser.name,
+        createdAt: new Date().toISOString(),
+      };
+      Post.comment(newData, (respone) => {
+        res.send({ data: respone });
+      });
+    });
+  } else {
+    var dataComment = {
+      postId: req.body.postId,
+      message: req.body.message,
+      emailUser: req.user?.name,
       createdAt: new Date().toISOString(),
     };
-    Post.comment(newData, (respone) => {
+    Post.comment(dataComment, (respone) => {
       res.send({ data: respone });
     });
-  });
+  }
 };
 
 export const getCommentByPage = function (req, res) {

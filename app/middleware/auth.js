@@ -26,6 +26,7 @@ export const isAuth = async (req, res, next) => {
     try {
       if (_token.length > 700) {
         const verifyTokenData = await admin?.auth()?.verifyIdToken(_token);
+        console.log(verifyTokenData);
         req.user = {
           name: verifyTokenData.name,
           email: verifyTokenData.email,
