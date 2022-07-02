@@ -12,7 +12,6 @@ export const getPostByPage = function (req, res) {
   const { page } = req.query;
   db.query("SELECT * FROM posts", (error, res2) => {
     if (error) {
-      console.log(error);
       res.send({ result: "Cant get posts" });
     } else {
       const fetchData = async () => {
