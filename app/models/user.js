@@ -10,7 +10,7 @@ const User = function (user) {
 };
 
 User.get_All = (result) => {
-  db.query("SELECT * FROM users", (error, res) => {
+  db.query("SELECT * FROM users where NOT (password = '')", (error, res) => {
     if (error) {
       result(null);
     } else result(res);

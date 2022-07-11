@@ -26,7 +26,6 @@ export const isAuth = async (req, res, next) => {
     try {
       if (_token.length > 700) {
         const verifyTokenData = await admin?.auth()?.verifyIdToken(_token);
-        console.log(verifyTokenData);
         req.user = {
           name: verifyTokenData.name,
           email: verifyTokenData.email,
@@ -41,9 +40,12 @@ export const isAuth = async (req, res, next) => {
       }
       next();
     } catch (error) {
+      console.log("Invalid token");
       return res.send({ data: "Invalid token" });
     }
   } else {
+    console.log("Dont have token");
+
     return res.send({ data: "Dont have token" });
   }
 };
