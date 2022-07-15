@@ -1,9 +1,11 @@
 # BackendFakebook
+
 Deploy Heroku
 
 Link: https://fakebookweb.netlify.app/
-DataBase: 
+DataBase:
 Host: sql6.freesqldatabase.com
-Database name: sql6483721
-Database user: sql6483721
-Database password: 3c6diMm9SJ
+Database name: sql6506657
+Database user: sql6506657
+Database password: JEyWg9DV8n
+Port number: 3306

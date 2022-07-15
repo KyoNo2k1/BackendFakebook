@@ -1,9 +1,9 @@
 import mysql from "mysql";
 var connection = mysql.createConnection({
   host: "sql6.freesqldatabase.com",
-  user: "sql6483721",
-  password: "3c6diMm9SJ",
-  database: "sql6483721",
+  user: "sql6506657",
+  password: "JEyWg9DV8n",
+  database: "sql6506657",
 });
 // var connection = mysql.createConnection({
 //   host: "localhost",
